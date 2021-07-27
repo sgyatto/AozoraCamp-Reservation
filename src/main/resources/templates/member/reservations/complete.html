@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <title>キャンセル完了</title>
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="container">
+    <h3 class="page-title">キャンセル完了</h3>
+    <p>予約をキャンセルしました。</p>
+    <div class="row">
+      <div class="col-md-3">
+        <form th:action="@{/member/reservations/list}" method="get">
+          <button class="btn btn-primary btn-block p-2" type="submit">予約一覧へ</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <title>予約完了</title>
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="container">
+    <h3 class="page-title">予約完了</h3>
+    <div class="d-flex flex-column align-items-center">
+      <div class="camp-complete-img-wrap">
+        <img class="camp-complete-img" th:src="@{/img/camp_complete_800.png}" width="400px" height="300" alt="">
+      </div>
+      <div class="mb-3">
+        <h4>予約が完了しました！</h4>
+      </div>
+      <div class="col-md-3">
+        <form th:action="@{/}" method="get">
+          <button class="btn btn-primary btn-block p-2" type="submit">トップページへ</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout/layout}">
+<head>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <title>予約内容確認</title>
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="container">
+    <h3 class="page-title">予約内容確認</h3>
+    <div class="row"
+         th:with="member=${reservation.getMember()}, siteType=${reservation.getSiteType()}, details=${reservation.getReservationDetails()}">
+      <div class="col-md-7 px-4">
+
+        <!--    予約者情報      -->
+        <section class="mb-5">
+          <h4>予約者情報</h4>
+          <div class="p-2 d-flex border-bottom">
+            <div class="col-5">名前</div>
+            <div class="col-7 text-right" id="userName" th:text="${member.getName()}"></div>
+          </div>
+          <div class="p-2 d-flex border-bottom pt-3">
+            <div class="col-5">メールアドレス</div>
+            <div class="col-7 text-right" id="mail" th:text="${member.getMail()}"></div>
+          </div>
+          <div class="p-2 d-flex border-bottom pt-3">
+            <div class="col-5">電話番号</div>
+            <div class="col-7 text-right" id="phoneNumber" th:text="${member.getPhoneNumber()}"></div>
+          </div>
+        </section>
+
+        <!--    宿泊情報    -->
+        <section class="mb-5">
+          <h4>宿泊情報</h4>
+          <div class="p-2 d-flex border-bottom">
+            <div class="col-5">サイトタイプ</div>
+            <div class="col-7 text-right" id="siteTypeName" th:text="${siteType.getName()}"></div>
+          </div>
+          <div class="p-2 d-flex border-bottom pt-3">
+            <div class="col-5">チェックイン日</div>
+            <div class="col-7 text-right" id="dateFrom"
+                 th:text="${#temporals.format(reservation.getDateFrom(), 'yyyy年M月d日')}"></div>
+          </div>
+          <div class="p-2 d-flex border-bottom pt-3">
+            <div class="col-5">宿泊日数</div>
+            <div class="col-7 text-right" id="stayDays" th:text="|${reservation.getStayDays()}日|"></div>
+          </div>
+          <div class="p-2 d-flex border-bottom pt-3">
+            <div class="col-5">人数</div>
+            <div class="col-7 text-right" id="numberOfPeople" th:text="|${reservation.getNumberOfPeople()}人|"></div>
+          </div>
+        </section>
+      </div>
+
+      <!--   宿泊料金   -->
+      <div class="col-md-5  px-4">
+        <div class="bg-light rounded pb-2  mb-3">
+          <div class="p-2 ml-3">
+            <h4>宿泊料金<span class="small">（現地精算）</span></h4>
+          </div>
+          <div class="p-2 d-flex">
+            <div class="col-7">合計金額</div>
+            <div class="col-5 text-right" id="totalAmount" name="totalAmount"
+                 th:text="|${#numbers.formatInteger(reservation.getTotalAmountTaxIncl(), 3, 'COMMA')}円|"></div>
+          </div>
+          <div class="p-2 d-flex pt-3">
+            <div class="col-7">内消費税</div>
+            <div class="col-5 text-right" id="salesTax" salesTax="tax"
+                 th:text="|${#numbers.formatInteger(reservation.getSalesTax(), 3, 'COMMA')}円|"></div>
+          </div>
+          <div class="p-2 ml-3 mt-4">
+            <h5>内訳</h5>
+          </div>
+          <div th:each="detail : ${details}">
+            <div class="p-2 d-flex">
+              <div class="col-7" th:text="|${#temporals.format(detail.getReservationDate(), 'yyyy年M月d日')}分|"></div>
+              <div class="col-5 text-right" id="siteRate"
+                   th:text="|${#numbers.formatInteger(detail.getSiteRate(), 3, 'COMMA')}円|"></div>
+            </div>
+            <div class="px-2 small mb-3">
+              <div class="col-12 text-left" id="rateTypeName" th:text="|${detail.getRateTypeName()}|"></div>
+            </div>
+          </div>
+        </div>
+
+        <!--    キャンセル日    -->
+        <div th:if="${reservation.isCanceled()}">
+          <div class="bg-light rounded pb-2  mb-3">
+            <div class="p-2 d-flex pt-3">
+              <div class="col-7">キャンセル日</div>
+              <div class="col-5 text-right" id="canceledDate" salesTax="canceledDate"
+                   th:text="${#temporals.format(reservation.getCanceledAt(), 'yyyy年M月d日')}"></div>
+            </div>
+          </div>
+        </div>
+
+        <!--   ボタン    -->
+        <div class="form-group row pt-2">
+          <button th:if="${reservation.canCancel() && !reservation.isCanceled()}" type="button" class="btn btn-outline-danger btn-block py-2 mx-md-3" data-toggle="modal" data-target="#cancelModal">キャンセル</button>
+          <a class="btn btn-secondary btn-block py-2 mx-md-3" th:href="@{/member/reservations/list(page=${pageNumber})}">戻る</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="cancelModalLabel">キャンセルの確認</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label>この予約をキャンセルしてよろしいですか？</label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+          <form th:action="@{/member/reservations/{id}/cancel(id=${reservation.getId()})}"
+                method="post">
+            <button class="btn btn-danger" type="submit">キャンセル</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

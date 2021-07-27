@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+  <link rel="stylesheet" th:href="@{/webjars/fullcalendar/main.min.css}">
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/camping/schedule.css}">
+  <script th:src="@{/webjars/fullcalendar/main.js}" defer></script>
+  <script th:src="@{/webjars/fullcalendar/locales/ja.js}" defer></script>
+  <script th:src="@{/webjars/dayjs/dayjs.min.js}" defer></script>
+  <script th:src="@{/webjars/dayjs/locale/ja.js}" defer></script>
+  <script th:src="@{/js/camping/schedule.js}" defer></script>
+  <title>予約 - スケジュール</title>
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="container">
+    <h3 class="page-title">チェックイン日の選択</h3>
+    <div class="schedule-container row flex-column flex-wrap">
+      <div class="col-md-3 order-1 order-md-1">
+        <label class="col-form-label">サイトタイプ：</label>
+        <p th:text="${siteTypeName}"></p>
+        <ul class="list-unstyled">
+          <li>◎：空きあり</li>
+          <li>△：残りわずか</li>
+          <li>×：満室</li>
+        </ul>
+      </div>
+      <div class="col-md-3 order-3 order-md-2">
+        <div class="form-group row pt-4">
+          <input class="btn btn-secondary btn-block py-2 mx-3" type="button" onclick="backward()" value="戻る">
+        </div>
+      </div>
+
+      <div class="col-md-9 order-2 order-md-3">
+        <div class="pt-4">
+          <div id="calendar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <input type="hidden" id="siteTypeId" name="siteTypeId" th:value="${siteTypeId}">
+</main>
+</body>
+</html>

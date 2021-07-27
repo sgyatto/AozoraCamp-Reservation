@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout/layout}">
+<head>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <title>予約内容確認</title>
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="container">
+    <h3 class="page-title">予約内容確認</h3>
+    <div class="row" th:with="dto=${reserveConfirmDto}, stayInfo=${stayInfoForm}">
+      <div class="col-md-7 px-4">
+        <section class="mb-5">
+          <h4>予約者情報</h4>
+          <div class="p-2 d-flex border-bottom">
+            <div class="col-5">名前</div>
+            <div class="col-7 text-right" id="userName" th:text="${userInfo.getName()}"></div>
+          </div>
+          <div class="p-2 d-flex border-bottom pt-3">
+            <div class="col-5">メールアドレス</div>
+            <div class="col-7 text-right" id="mail" th:text="${userInfo.getMail()}"></div>
+          </div>
+          <div class="p-2 d-flex border-bottom pt-3">
+            <div class="col-5">電話番号</div>
+            <div class="col-7 text-right" id="phoneNumber" th:text="${userInfo.getPhoneNumber()}"></div>
+          </div>
+        </section>
+        <section class="mb-5">
+          <h4>宿泊情報</h4>
+          <div class="p-2 d-flex border-bottom">
+            <div class="col-5">サイトタイプ</div>
+            <div class="col-7 text-right" id="siteTypeName" th:text="${stayInfo.getSiteTypeName()}"></div>
+          </div>
+          <div class="p-2 d-flex border-bottom pt-3">
+            <div class="col-5">チェックイン日</div>
+            <div class="col-7 text-right" id="dateFrom"
+                 th:text="${#temporals.format(stayInfo.getDateFrom(), 'yyyy年M月d日')}"></div>
+          </div>
+          <div class="p-2 d-flex border-bottom pt-3">
+            <div class="col-5">宿泊日数</div>
+            <div class="col-7 text-right" id="stayDays" th:text="|${stayInfo.getStayDays()}日|"></div>
+          </div>
+          <div class="p-2 d-flex border-bottom pt-3">
+            <div class="col-5">人数</div>
+            <div class="col-7 text-right" id="numberOfPeople" th:text="|${stayInfo.getNumberOfPeople()}人|"></div>
+          </div>
+        </section>
+      </div>
+      <div class="col-md-5  px-4">
+        <div class="bg-light rounded pb-2  mb-3">
+          <div class="p-2 ml-3">
+            <h4>宿泊料金<span class="small">（現地精算）</span></h4>
+          </div>
+          <div class="p-2 d-flex">
+            <div class="col-7">合計金額</div>
+            <div class="col-5 text-right" id="totalAmount" name="totalAmount"
+                 th:text="|${#numbers.formatInteger(dto.getTotalAmountTaxIncl(), 3, 'COMMA')}円|"></div>
+          </div>
+          <div class="p-2 d-flex pt-3">
+            <div class="col-7">内消費税</div>
+            <div class="col-5 text-right" id="salesTax" salesTax="tax"
+                 th:text="|${#numbers.formatInteger(dto.getSalesTax(), 3, 'COMMA')}円|"></div>
+          </div>
+          <div class="p-2 ml-3 mt-4">
+            <h5>内訳</h5>
+          </div>
+          <div th:each="detail : ${dto.getReservationDetails()}">
+            <div class="p-2 d-flex">
+              <div class="col-7" th:text="|${#temporals.format(detail.getReservationDate(), 'yyyy年M月d日')}分|"></div>
+              <div class="col-5 text-right" id="siteRate"
+                   th:text="|${#numbers.formatInteger(detail.getSiteRate(), 3, 'COMMA')}円|"></div>
+            </div>
+            <div class="px-2 small mb-3">
+              <div class="col-12 text-left" id="rateTypeName" th:text="|${detail.getRateTypeName()}|"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <form class="col-md-12" th:action="@{/camping/{param}/reserve(param=${guestFlg ? 'guest' : 'member'})}" th:object="${userInfoForm}" method="post">
+            <div class="form-group row pt-2">
+              <button class="btn btn-primary btn-block py-2 mx-md-3" type="submit">確定</button>
+              <button sec:authorize="!isAuthenticated()" class="btn btn-secondary  btn-block py-2 mx-md-3" type="submit" name="redoUserInfo">戻る</button>
+              <button sec:authorize="isAuthenticated()" class="btn btn-secondary  btn-block py-2 mx-md-3" type="submit" name="redoSiteInfo">戻る</button>
+            </div>
+            <input type="hidden" name="siteTypeId" th:value="${stayInfoForm.getSiteTypeId()}">
+            <input type="hidden" name="dateFrom" th:value="${stayInfoForm.getDateFrom()}">
+            <input type="hidden" name="stayDays" th:value="${stayInfoForm.getStayDays()}">
+            <input type="hidden" name="numberOfPeople" th:value="${stayInfoForm.getNumberOfPeople()}">
+            <input type="hidden" name="siteTypeName" th:value="${stayInfoForm.getSiteTypeName()}">
+            <input type="hidden" th:field="*{name}">
+            <input type="hidden" th:field="*{mail}">
+            <input type="hidden" th:field="*{phoneNumber}">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</main>
+</body>
+</html>

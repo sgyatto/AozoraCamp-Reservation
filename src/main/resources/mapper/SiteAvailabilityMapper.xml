@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.aozoracampreservation.infrastructure.repository.SiteAvailabilityMapper">
+  <select id="findSiteAvailability" resultType="SiteAvailability">
+    select
+            calendar_date
+            , site_type_id
+            , availability_count
+            , max_count
+    from
+            site_availability
+    where
+            site_type_id = #{siteTypeId}
+            and calendar_date between #{from} and #{to}
+  </select>
+  <select id="countDaysNotAvailable" resultType="int">
+    select
+            count(*)
+    from
+            site_availability
+    where
+            site_type_id = #{siteTypeId}
+            and calendar_date between #{from} and #{to}
+            and availability_count = 0
+  </select>
+  <update id="reduceAvailabilityCount">
+    update
+            site_availability
+    set
+            availability_count = availability_count - 1
+    where
+            site_type_id = #{siteTypeId}
+            and calendar_date between #{from} and #{to}
+            and availability_count > 0
+  </update>
+</mapper>

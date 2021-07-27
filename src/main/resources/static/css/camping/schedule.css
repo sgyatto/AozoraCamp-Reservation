@@ -1,0 +1,67 @@
+@charset "UTF-8";
+
+/* カレンダー */
+#calendar {
+  max-width: 650px;
+  max-height: 700px;
+}
+
+/* 曜日ヘッダ */
+.fc-col-header-cell-cushion {
+  color: #000000B2;
+}
+/* 土曜ヘッダ */
+.fc-day-sat .fc-col-header-cell-cushion {
+  color: blue;
+}
+/* 日曜ヘッダ */
+.fc-day-sun .fc-col-header-cell-cushion {
+  color: red;
+}
+
+/* 土曜の日付文字 */
+td.fc-day-sat .fc-daygrid-day-number {
+  color: blue;
+}
+
+/* 日曜の日付文字 */
+td.fc-day-sun .fc-daygrid-day-number {
+  color: red;
+}
+
+/* 土日を除く日付文字 */
+.fc-daygrid-day-number {
+  color: #000000B2;
+}
+
+/* 日付を中央寄せ */
+.fc .fc-daygrid-day-top {
+  flex-direction: row;
+  justify-content: center
+}
+
+/* イベントタイトル */
+.fc-event-title {
+  font-size: 1.5em;
+}
+
+/* イベント枠 */
+div.fc-sticky {
+  position: static;
+  text-align: center;
+}
+.fc-h-event .fc-event-title {
+  display: block;
+}
+
+/* 日にち枠hover */
+.fc-daygrid-day:not(.fc-day-disabled):hover {
+  background: #e0ffe4;
+}
+
+/* 縦並びの折返し基準 */
+@media ( min-width : 768px ) {
+  .schedule-container {
+    max-height: 700px;
+  }
+}

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.aozoracampreservation.infrastructure.repository.MemberMapper">
+  <select id="findByMail" resultType="Member">
+    select
+            id
+            , name
+            , mail
+            , password
+            , phone_number
+            , role
+            , updated_at
+            , created_at
+    from
+            members
+    where
+            lower(mail) = lower(#{mail})
+  </select>
+  <select id="findById" resultType="Member">
+    select
+            id
+           , name
+           , mail
+           , password
+           , phone_number
+           , role
+           , updated_at
+           , created_at
+    from
+            members
+    where
+            id = #{id}
+  </select>
+  <insert id="create">
+    insert into members (
+            name
+            , mail
+            , password
+            , phone_number
+            , role
+    ) values (
+            #{name}
+            , #{mail}
+            , #{password}
+            , #{phoneNumber}
+            , #{role}
+    )
+  </insert>
+  <update id="update">
+    update  members
+    set
+            name = #{name}
+            , mail = #{mail}
+            , password = #{password}
+            , phone_number = #{phoneNumber}
+            , role = #{role}
+    where
+            id = #{id}
+  </update>
+  <update id="updatePassword">
+    update  members
+    set
+            password = #{encodedPassword}
+    where
+            id = #{id}
+  </update>
+</mapper>

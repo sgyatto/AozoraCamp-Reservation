@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.aozoracampreservation.infrastructure.repository.SiteRateMapper">
+  <resultMap type="SiteRate" id="siteRate">
+    <id column="site_type_id" property="siteTypeId"/>
+    <id column="rate_types_id" property="rateTypeId"/>
+    <id column="date_from" property="dateFrom"/>
+    <result column="rate" property="rate"/>
+    <result column="tax_rate" property="taxRate"/>
+    <association property="siteType" javaType="SiteType">
+      <id column="site_types_id" property="id"/>
+      <result column="site_types_name" property="name"/>
+      <result column="site_types_capacity" property="capacity"/>
+    </association>
+    <association property="rateType" javaType="RateType">
+      <id column="rate_types_id" property="id"/>
+      <result column="rate_types_name" property="name"/>
+    </association>
+  </resultMap>
+  <select id="findSiteRate" resultMap="siteRate">
+    select
+            site_rates.site_type_id as site_type_id
+            , rate_types.id         as rate_types_id
+            , rate_types.name       as rate_types_name
+            , site_rates.rate       as rate
+            , (select
+                      rate
+                from
+                    sales_tax
+                where #{date} between date_from and date_to) as tax_rate
+    from
+            calendar
+            join rate_types
+                on calendar.rate_type_id = rate_types.id
+            join site_rates
+                on calendar.rate_type_id = site_rates.rate_type_id
+    where
+            calendar.calendar_date = #{date}
+            and site_rates.site_type_id = #{siteTypeId}
+            and #{date} between site_rates.date_from and site_rates.date_to
+  </select>
+  <select id="findAllSiteRatesPivot" resultType="SiteRatePivot">
+    select
+            site_rates.site_type_id as site_type_id
+            , site_types.name       as site_type_name
+            , max(case when  rate_types.id  = 1 then rate end) as rate_basic
+            , max(case when  rate_types.id  = 2 then rate end) as rate_high_season
+    from
+            site_rates
+            inner join rate_types on site_rates.rate_type_id = rate_types.id
+            inner join site_types on site_rates.site_type_id = site_types.id
+    where
+            #{date} between site_rates.date_from and site_rates.date_to
+    group by
+            site_type_id
+           , site_types.name
+    order by
+             site_type_id
+  </select>
+</mapper>

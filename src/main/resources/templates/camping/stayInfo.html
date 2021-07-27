@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout/layout}">
+<head>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <script th:src="@{/js/camping/stayInfo.js}" defer></script>
+  <title>宿泊情報</title>
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="container">
+    <h3 class="page-title">宿泊情報</h3>
+
+    <div class="">
+      <form th:action="@{/camping/stayInfo}" method="post"
+            th:object="${stayInfoForm}">
+        <div class="form-group row">
+          <label for="siteTypeName" class="col-md-3 col-form-label">
+            サイトタイプ
+          </label>
+          <div class="col-md-9">
+            <input type="text" disabled class="form-control-plaintext" id="siteTypeNameDisable" name="siteTypeNameDisable" th:value="${stayInfoForm.getSiteTypeName()}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="dateFromFormatted" class="col-md-3 col-form-label">チェックイン日</label>
+          <div class="col-md-9">
+            <input type="text" disabled class="form-control-plaintext" id="dateFromFormatted" name="dateFromFormatted" th:value="${#temporals.format(stayInfoForm.getDateFrom(), 'yyyy年M月d日')}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="stayDays">
+            宿泊日数 <span class="badge badge-warning">必須</span>
+          </label>
+          <div class="col-md-5">
+            <select class="form-control" th:field="*{stayDays}" th:errorclass="is-invalid">
+              <option value="1" selected>1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{stayDays}"></div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="numberOfPeople">
+            人数 <span class="badge badge-warning">必須</span>
+          </label>
+          <div class="col-md-5">
+            <select class="form-control" th:field="*{numberOfPeople}" th:errorclass="is-invalid">
+              <option value="1" selected>1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{numberOfPeople}"></div>
+          </div>
+        </div>
+        <div class="form-group row pt-4">
+          <div class="col-md-5 offset-md-3">
+            <button sec:authorize="isAuthenticated()" class="btn btn-primary btn-block py-2" type="submit" name="member">予約に進む</button>
+            <button sec:authorize="!isAuthenticated()" class="btn btn-primary btn-block py-2" type="submit" name="member">ログインして予約に進む</button>
+            <button sec:authorize="!isAuthenticated()" class="btn btn-primary btn-block py-2" type="submit" name="guest">会員登録せずに予約に進む</button>
+            <input class="btn btn-secondary btn-block py-2 mr-md-5" type="button" onclick="backward()" value="戻る">
+          </div>
+        </div>
+        <input type="hidden" th:field="*{siteTypeId}">
+        <input type="hidden" th:field="*{dateFrom}">
+        <input type="hidden" th:field="*{siteTypeName}">
+      </form>
+    </div>
+  </div>
+</main>
+</body>
+</html>

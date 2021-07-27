@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <title>予約者情報</title>
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="container">
+    <h3 class="page-title">予約者情報</h3>
+
+    <form th:action="@{/camping/guest/reserve}" method="post"
+          th:object="${userInfoForm}">
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="name">
+          名前 <span class="badge badge-warning">必須</span>
+        </label>
+        <div class="col-md-6">
+          <input class="form-control" type="text" th:field="*{name}"
+                 th:errorclass="is-invalid" autofocus>
+          <div><small>100字以内</small></div>
+          <div class="invalid-feedback" th:errors="*{name}"></div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="mail">
+          メールアドレス <span class="badge badge-warning">必須</span>
+        </label>
+        <div class="col-md-6">
+          <input class="form-control" type="text" th:field="*{mail}"
+                 th:errorclass="is-invalid">
+          <div><small>例: aozoracamp@reservation.co.jp</small></div>
+          <div class="invalid-feedback" th:errors="*{mail}"></div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="phoneNumber">
+          電話番号 <span class="badge badge-warning">必須</span>
+        </label>
+        <div class="col-md-6">
+          <input class="form-control" type="text" th:field="*{phoneNumber}"
+                 th:errorclass="is-invalid">
+          <div><small>ハイフン"-"を含まない半角数字 例: 09012345678</small></div>
+          <div class="invalid-feedback" th:errors="*{phoneNumber}"></div>
+        </div>
+      </div>
+      <div class="form-group row mt-4">
+        <div class="col-md-6 offset-md-3">
+          <button class="btn btn-primary btn-block py-2" type="submit" name="confirm">確認</button>
+          <button class="btn btn-secondary btn-block py-2" type="submit" name="redoSiteInfo">戻る</button>
+        </div>
+      </div>
+      <input type="hidden" name="siteTypeId" th:value="${stayInfoForm.getSiteTypeId()}">
+      <input type="hidden" name="dateFrom" th:value="${stayInfoForm.getDateFrom()}">
+      <input type="hidden" name="stayDays" th:value="${stayInfoForm.getStayDays()}">
+      <input type="hidden" name="numberOfPeople" th:value="${stayInfoForm.getNumberOfPeople()}">
+      <input type="hidden" name="siteTypeName" th:value="${stayInfoForm.getSiteTypeName()}">
+    </form>
+  </div>
+</main>
+</body>
+</html>

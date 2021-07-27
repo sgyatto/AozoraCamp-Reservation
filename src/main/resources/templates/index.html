@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <title>Aozora Camp Reservation - Top</title>
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="container">
+    <h3 class="page-title">ご予約受付</h3>
+    <section id="siteRates" class="mb-1">
+      <h4>料金表</h4>
+      <div class="py-2">
+        <p>当キャンプ場のサイトタイプ別料金表です。料金はシーズンにより変動します。</p>
+      </div>
+      <div class="siteRatesTable mx-md-auto py-3">
+        <table class="table table-striped table-bordered">
+          <thead>
+          <tr>
+            <th scope="col">サイトタイプ</th>
+            <th scope="col">通常料金</th>
+            <th scope="col">ハイシーズン料金</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="siteRate : ${siteRates}">
+            <th scope="row" th:text="${siteRate.getSiteTypeName()}"></th>
+            <td th:text="|${#numbers.formatInteger(siteRate.getRateBasic(), 3, 'COMMA')}円|"></td>
+            <td th:text="|${#numbers.formatInteger(siteRate.getRateHighSeason(), 3, 'COMMA')}円|"></td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="text-right">
+          <p><small>※ハイシーズン：7月1日〜9月30日</small></p>
+        </div>
+      </div>
+    </section>
+    <section id="policy" class="mb-3">
+      <h4>予約について</h4>
+      <div class="py-2">
+        <ul>
+          <li>ご予約は、翌日〜90日間までを受け付けております。</li>
+          <li>ご予約のキャンセルは、マイページにてチェックインの３日前まで可能です。それ以降のキャンセルは、お電話にて受け付けております。</li>
+        </ul>
+      </div>
+    </section>
+    <div>
+      <a class="btn btn-lg btn-outline-primary btn-block py-3" role="button" th:href="@{/camping/siteTypes}">サイトを選ぶ</a>
+    </div>
+  </div>
+</main>
+</body>
+</html>

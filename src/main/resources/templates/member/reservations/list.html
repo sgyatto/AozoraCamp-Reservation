@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <title>予約一覧</title>
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="container">
+    <h3 class="page-title">予約一覧</h3>
+
+    <!-- ページネーション -->
+    <div>
+      <nav th:if="${page != null and page.getContent().size() > 0}">
+        <ul class="pagination justify-content-center">
+          <li th:class="${page.first} ? 'page-item disabled' : 'page-item'">
+            <a th:href="@{/member/reservations/list(page=0)}" class="page-link" aria-label="前へ">
+              <span aria-hidden="true">&laquo;</span>
+              <span class="sr-only">前へ</span>
+            </a>
+          </li>
+          <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+              th:class="(${i} == ${page.number}) ? 'page-item active' : 'page-item'">
+            <a th:href="@{/member/reservations/list(page=${i})}" class="page-link">
+              <span th:text="${i + 1}"></span>
+            </a>
+          </li>
+          <li th:class="${page.last} ? 'page-item disabled' : 'page-item'">
+            <a th:href="@{/member/reservations/list(page=${page.totalPages - 1})}" class="page-link" aria-label="次へ">
+              <span aria-hidden="true">&raquo;</span>
+              <span class="sr-only">次へ</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <!--  予約一覧  -->
+    <div>
+      <table class="table table-striped reservation-list">
+        <thead>
+        <tr>
+          <th>チェックイン日</th>
+          <th>サイトタイプ</th>
+          <th>宿泊日数</th>
+          <th>人数</th>
+          <th>ステータス</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="reservation : ${page.getContent()}">
+          <td th:text="${reservation.getDateFrom()}"></td>
+          <td th:text="${reservation.getSiteType().getName()}"></td>
+          <td th:text="${reservation.getStayDays()}"></td>
+          <td th:text="${reservation.getNumberOfPeople()}"></td>
+          <td th:text="${reservation.isCanceled() ? 'キャンセル' : '―' }"></td>
+          <td><a class="btn btn-primary detail-btn"
+                 th:href="@{/member/reservations/{id}(page=${page.number}, id=${reservation.getId()})}">詳細</a></td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="row">
+        <div class="col-md-2">
+          <a class="btn btn-secondary btn-block py-2" th:href="@{/member/menu}">戻る</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

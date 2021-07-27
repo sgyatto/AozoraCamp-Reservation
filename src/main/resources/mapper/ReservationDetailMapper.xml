@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.aozoracampreservation.infrastructure.repository.ReservationDetailMapper">
+  <insert id="createDetails">
+    insert into reservation_details (
+              reservation_id
+            , reservation_date
+            , site_rate
+            , tax_rate
+            , rate_type_name
+    ) values
+    <foreach item="detail" collection="details" separator=",">
+    (
+            #{reservationId}
+            , #{detail.reservationDate}
+            , #{detail.siteRate}
+            , #{detail.taxRate}
+            , #{detail.rateTypeName}
+    )
+    </foreach>
+  </insert>
+</mapper>

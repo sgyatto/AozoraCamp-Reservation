@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <title>メールアドレス変更</title>
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="container">
+      <h3 class="page-title">メールアドレス変更</h3>
+      <form th:action="@{/member/mail}" method="post"
+            th:object="${updateMailForm}">
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="currentMail">
+            現在のメールアドレス
+          </label>
+          <div class="col-md-6">
+            <input disabled class="form-control-plaintext" type="text" th:value="${currentMail}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label" for="mail">
+            新しいメールアドレス <span class="badge badge-warning">必須</span>
+          </label>
+          <div class="col-md-6">
+            <input class="form-control" type="text" th:field="*{mail}"
+                   th:errorclass="is-invalid">
+            <div><small>例: aozoracamp@reservation.co.jp</small></div>
+            <div class="invalid-feedback" th:errors="*{mail}"></div>
+          </div>
+        </div>
+        <div class="form-group row pt-4">
+          <div class="col-md-6 offset-md-3">
+            <button class="btn btn-primary btn-block py-2" name="complete">保存</button>
+            <a class="btn btn-secondary btn-block py-2" th:href="@{/member/menu}">戻る</a>
+          </div>
+        </div>
+      </form>
+    </div>
+</main>
+</body>
+</html>
