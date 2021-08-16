@@ -37,7 +37,12 @@ main > .container {
 
 /* ログイン */
 #login {
-  margin-top: 80px;
+  margin-top: 130px;
+}
+@media (max-width: 575px) {
+  #login {
+    margin-top: 30px;
+  }
 }
 
 /* 予約完了 */
