@@ -2,6 +2,7 @@ package com.example.aozoracampreservation.application.service.api;
 
 import com.example.aozoracampreservation.domain.model.SiteAvailability;
 import com.example.aozoracampreservation.domain.service.SiteAvailabilityService;
+import com.example.aozoracampreservation.exception.BadRequestException;
 import com.example.aozoracampreservation.exception.SystemException;
 import com.example.aozoracampreservation.presentation.api.ResultSiteAvailability;
 import org.springframework.context.MessageSource;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -30,30 +32,36 @@ public class SiteAvailabilityRestAppService {
 
 	/**
 	 * サイト空き状況（スケジュール用）の検索
-	 * @param siteTypeId
+	 * @param siteTypeId サイトタイプID
+	 * @param startDate 取得開始日
+	 * @param endDate 取得終了日
 	 * @return サイト空き状況リスト（スケジュール用）
 	 */
 	public List<ResultSiteAvailability> fetchSiteAvailabilityForSchedule(
-			int siteTypeId) {
+			int siteTypeId, LocalDate startDate, LocalDate endDate) {
 
-		// 取得範囲は翌日〜90日分
-		LocalDate tomorrow = LocalDate.now().plusDays(1);
-		LocalDate to = LocalDate.now().plusDays(90);
+		// 最大取得範囲は縦6マス×横7マス
+		long period = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+		if (period > 42) {
+			throw new BadRequestException(messageSource.getMessage(
+					"exception.periodIncorrect", null, Locale.JAPAN));
+		}
+
 		// サイト空き状況検索
 		List<SiteAvailability> result = siteAvailabilityService
-				.findSiteAvailability(siteTypeId, tomorrow, to);
+				.findSiteAvailability(siteTypeId, startDate, endDate);
 		if (result.isEmpty()) {
 			throw new SystemException(messageSource.getMessage("exception.dataNotFound3",
-					new String[] {String.valueOf(siteTypeId), tomorrow.toString(), to.toString()}, Locale.JAPAN));
+					new String[] {String.valueOf(siteTypeId), startDate.toString(), endDate.toString()}, Locale.JAPAN));
 		}
 
 		return result.stream().map(element -> new ResultSiteAvailability(
-									generateTitle(element.getAvailabilityCount())
-									, element.getCalendarDate()
-									, generateUrl(element.getAvailabilityCount()
-												, element.getSiteTypeId()
-												, element.getCalendarDate())))
-									.collect(Collectors.toList());
+				generateTitle(element.getAvailabilityCount())
+				, element.getCalendarDate()
+				, generateUrl(element.getAvailabilityCount()
+				, element.getSiteTypeId()
+				, element.getCalendarDate())))
+				.collect(Collectors.toList());
 	}
 
 	/**

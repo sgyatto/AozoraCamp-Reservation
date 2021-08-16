@@ -38,8 +38,27 @@ document.addEventListener("DOMContentLoaded", function() {
         end: dayjs().add(91, "day").format("YYYY-MM-DD")
       };
     },
-    // APIのURL
-    events: eventsUrl,
+    events: function fetchSiteAvailability(info, successCallback, failureCallback) {
+      // 取得開始日
+      let start = dayjs(info.start).format("YYYY-MM-DD");
+      // 取得終了日
+      let end = dayjs(info.end).subtract(1, "day").format("YYYY-MM-DD");
+      // APIから対象期間のデータをfetch
+      let uri = new URL(window.location.href);
+      fetch(`${uri.origin}/api/schedule/siteTypes/${siteTypeId}?start=${start}&end=${end}`)
+        .then(response => {
+          if (!response.ok) {
+            console.error("error_response", response);
+            failureCallback();
+          } else {
+            response.json().then(result => {
+              successCallback(result);
+            })
+          }
+        }).catch(error => {
+          console.error(error);
+      })
+    },
     eventColor: "transparent",
     eventTextColor: "navy",
   });
