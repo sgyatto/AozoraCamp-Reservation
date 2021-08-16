@@ -8,7 +8,7 @@ import com.example.aozoracampreservation.domain.model.StayInfo;
 import com.example.aozoracampreservation.domain.model.UserInfo;
 import com.example.aozoracampreservation.exception.BusinessException;
 import com.example.aozoracampreservation.exception.SystemException;
-import com.example.aozoracampreservation.security.user_details.AuthenticatedMember;
+import com.example.aozoracampreservation.security.AuthenticatedMember;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DataAccessException;

@@ -1,7 +1,7 @@
 package com.example.aozoracampreservation.domain.service;
 
 import com.example.aozoracampreservation.domain.model.Reservation;
-import com.example.aozoracampreservation.infrastructure.repository.ReservationMapper;
+import com.example.aozoracampreservation.repository.ReservationMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

@@ -3,7 +3,7 @@ package com.example.aozoracampreservation.application.service.member;
 import com.example.aozoracampreservation.domain.model.Member;
 import com.example.aozoracampreservation.domain.service.MemberService;
 import com.example.aozoracampreservation.exception.SystemException;
-import com.example.aozoracampreservation.security.user_details.AuthenticatedMember;
+import com.example.aozoracampreservation.security.AuthenticatedMember;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

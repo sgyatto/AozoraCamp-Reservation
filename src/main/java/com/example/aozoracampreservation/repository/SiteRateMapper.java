@@ -1,4 +1,4 @@
-package com.example.aozoracampreservation.infrastructure.repository;
+package com.example.aozoracampreservation.repository;
 
 import com.example.aozoracampreservation.domain.model.SiteRate;
 import com.example.aozoracampreservation.domain.model.SiteRatePivot;

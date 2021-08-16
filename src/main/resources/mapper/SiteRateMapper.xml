@@ -3,7 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.aozoracampreservation.infrastructure.repository.SiteRateMapper">
+<mapper namespace="com.example.aozoracampreservation.repository.SiteRateMapper">
   <resultMap type="SiteRate" id="siteRate">
     <id column="site_type_id" property="siteTypeId"/>
     <id column="rate_types_id" property="rateTypeId"/>

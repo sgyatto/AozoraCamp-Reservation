@@ -4,7 +4,7 @@ import com.example.aozoracampreservation.application.service.member.Reservations
 import com.example.aozoracampreservation.domain.model.Reservation;
 import com.example.aozoracampreservation.exception.BusinessException;
 import com.example.aozoracampreservation.exception.SystemException;
-import com.example.aozoracampreservation.security.user_details.AuthenticatedMember;
+import com.example.aozoracampreservation.security.AuthenticatedMember;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

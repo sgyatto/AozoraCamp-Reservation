@@ -1,4 +1,4 @@
-package com.example.aozoracampreservation.security.user_details;
+package com.example.aozoracampreservation.security;
 
 import com.example.aozoracampreservation.domain.model.Member;
 import org.springframework.security.core.GrantedAuthority;

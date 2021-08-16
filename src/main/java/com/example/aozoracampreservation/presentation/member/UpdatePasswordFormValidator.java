@@ -1,9 +1,7 @@
 package com.example.aozoracampreservation.presentation.member;
 
 import com.example.aozoracampreservation.domain.service.MemberService;
-import com.example.aozoracampreservation.security.user_details.AuthenticatedMember;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.aozoracampreservation.security.AuthenticatedMember;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;

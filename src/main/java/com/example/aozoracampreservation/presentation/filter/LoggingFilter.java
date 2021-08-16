@@ -1,6 +1,6 @@
 package com.example.aozoracampreservation.presentation.filter;
 
-import com.example.aozoracampreservation.security.user_details.AuthenticatedMember;
+import com.example.aozoracampreservation.security.AuthenticatedMember;
 import org.slf4j.MDC;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

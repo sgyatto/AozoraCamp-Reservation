@@ -1,7 +1,7 @@
 package com.example.aozoracampreservation.domain.service;
 
 import com.example.aozoracampreservation.domain.model.SiteAvailability;
-import com.example.aozoracampreservation.infrastructure.repository.SiteAvailabilityMapper;
+import com.example.aozoracampreservation.repository.SiteAvailabilityMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

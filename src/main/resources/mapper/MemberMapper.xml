@@ -3,7 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.aozoracampreservation.infrastructure.repository.MemberMapper">
+<mapper namespace="com.example.aozoracampreservation.repository.MemberMapper">
   <select id="findByMail" resultType="Member">
     select
             id

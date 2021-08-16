@@ -3,7 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.aozoracampreservation.infrastructure.repository.ReservationMapper">
+<mapper namespace="com.example.aozoracampreservation.repository.ReservationMapper">
   <resultMap type="Reservation" id="reservation">
     <id column="id" property="id"/>
     <result column="site_type_id" property="siteTypeId"/>

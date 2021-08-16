@@ -1,7 +1,7 @@
 package com.example.aozoracampreservation.domain.service;
 
 import com.example.aozoracampreservation.domain.model.SiteType;
-import com.example.aozoracampreservation.infrastructure.repository.SiteTypeMapper;
+import com.example.aozoracampreservation.repository.SiteTypeMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

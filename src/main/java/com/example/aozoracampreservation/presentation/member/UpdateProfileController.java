@@ -2,7 +2,7 @@ package com.example.aozoracampreservation.presentation.member;
 
 import com.example.aozoracampreservation.application.service.member.UpdateProfileAppService;
 import com.example.aozoracampreservation.domain.model.Member;
-import com.example.aozoracampreservation.security.user_details.AuthenticatedMember;
+import com.example.aozoracampreservation.security.AuthenticatedMember;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;

@@ -2,7 +2,7 @@ package com.example.aozoracampreservation.domain.service;
 
 import com.example.aozoracampreservation.domain.model.SiteRate;
 import com.example.aozoracampreservation.domain.model.SiteRatePivot;
-import com.example.aozoracampreservation.infrastructure.repository.SiteRateMapper;
+import com.example.aozoracampreservation.repository.SiteRateMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,8 +1,8 @@
 package com.example.aozoracampreservation.domain.service;
 
 import com.example.aozoracampreservation.domain.model.Member;
-import com.example.aozoracampreservation.infrastructure.repository.MemberMapper;
-import com.example.aozoracampreservation.security.user_details.Role;
+import com.example.aozoracampreservation.repository.MemberMapper;
+import com.example.aozoracampreservation.security.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

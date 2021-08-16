@@ -1,4 +1,4 @@
-package com.example.aozoracampreservation.security.user_details;
+package com.example.aozoracampreservation.security;
 
 /**
  * ロール
