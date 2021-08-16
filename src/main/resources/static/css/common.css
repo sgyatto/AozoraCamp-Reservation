@@ -21,6 +21,10 @@ main > .container {
 .footer-text {
   margin-bottom: 0;
 }
+.form-control-plaintext:disabled {
+  -webkit-text-fill-color: #212529;
+  opacity: 1;
+}
 
 /* サイトタイプ一覧 */
 .siteRatesTable {
