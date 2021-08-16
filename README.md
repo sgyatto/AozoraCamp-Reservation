@@ -1,6 +1,6 @@
 # Aozora Camp Reservation
 
-https://aozoracamprsv.com
+<a href="https://aozoracamprsv.com" target="_blank" rel="noopener noreferrer">https:&#047;&#047;aozoracamprsv.com</a>
 
 <img src="https://i.gyazo.com/dfa9b268f772662ec5d299dfe161edd9.png" width="600px">
 
@@ -41,8 +41,8 @@ https://aozoracamprsv.com
 - Spring Security 5.5.1
 - Thymeleaf 3.0.4
 - Bootstrap 4.5.3
+- Tomcat(Embedded) 9.0.48
 - MyBatis 3.5.7
-- Tomcat 9.0.48
 - PostgreSQL 13.3
 
 ### Infrastructure
@@ -55,7 +55,7 @@ https://aozoracamprsv.com
 - AWS Certificate Manager
 - Amazon S3
 
-## ER
+## ER図
 <img src="https://i.gyazo.com/5d2251af38fb6fa0dee67b36cfe63c4a.png" width="800px">
 
 ## Demo
