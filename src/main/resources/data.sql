@@ -147,13 +147,13 @@ from
 -- reservations
 insert into "reservations"("id","site_type_id","date_from","stay_days","number_of_people","total_amount_tax_incl","sales_tax","reservation_method","member_id","non_member_name","non_member_mail","non_member_phone_number","canceled_at","created_at")
 values
-(default ,1,E'2021-09-02',2,1,8800,800,E'1',1,NULL,NULL,NULL,NULL,E'2021-08-15 13:45:31.934168'),
-(default ,3,E'2021-08-25',1,1,7700,700,E'1',1,NULL,NULL,NULL,NULL,E'2021-08-15 13:46:07.733142'),
-(default ,3,E'2021-08-31',1,1,7700,700,E'1',1,NULL,NULL,NULL,NULL,E'2021-08-15 13:46:33.467437'),
-(default ,2,E'2021-09-15',3,3,18150,1650,E'1',1,NULL,NULL,NULL,NULL,E'2021-08-15 13:48:15.109568'),
-(default ,3,E'2021-09-13',1,1,7700,700,E'1',1,NULL,NULL,NULL,NULL,E'2021-08-15 13:48:50.726346'),
-(default ,2,E'2021-09-18',2,1,12100,1100,E'1',1,NULL,NULL,NULL,NULL,E'2021-08-15 13:49:31.789736'),
-(default ,3,E'2021-08-28',1,1,7700,700,E'1',1,NULL,NULL,NULL,NULL,E'2021-08-15 13:50:34.095119');
+(default ,1,E'2021-09-02',2,1,8800,800,1,1,NULL,NULL,NULL,NULL,E'2021-08-15 13:45:31.934168'),
+(default ,3,E'2021-08-25',1,1,7700,700,1,1,NULL,NULL,NULL,NULL,E'2021-08-15 13:46:07.733142'),
+(default ,3,E'2021-08-31',1,1,7700,700,1,1,NULL,NULL,NULL,NULL,E'2021-08-15 13:46:33.467437'),
+(default ,2,E'2021-09-15',3,3,18150,1650,1,1,NULL,NULL,NULL,NULL,E'2021-08-15 13:48:15.109568'),
+(default ,3,E'2021-09-13',1,1,7700,700,1,1,NULL,NULL,NULL,NULL,E'2021-08-15 13:48:50.726346'),
+(default ,2,E'2021-09-18',2,1,12100,1100,1,1,NULL,NULL,NULL,NULL,E'2021-08-15 13:49:31.789736'),
+(default ,3,E'2021-08-28',1,1,7700,700,1,1,NULL,NULL,NULL,NULL,E'2021-08-15 13:50:34.095119');
 
 
 -- reservation_details

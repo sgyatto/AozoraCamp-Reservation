@@ -1,6 +1,6 @@
 # Aozora Camp Reservation
 
-<a href="https://aozoracamprsv.com" target="_blank" rel="noopener noreferrer">https:&#047;&#047;aozoracamprsv.com</a>
+https://aozoracamprsv.com
 
 <img src="https://i.gyazo.com/dfa9b268f772662ec5d299dfe161edd9.png" width="600px">
 
@@ -56,7 +56,7 @@
 - Amazon S3
 
 ## ER図
-<img src="https://i.gyazo.com/5d2251af38fb6fa0dee67b36cfe63c4a.png" width="800px">
+<img src="https://i.gyazo.com/a919c7356918121707f09b6b48ed5689.png" width="800px">
 
 ## Demo
 
