@@ -90,14 +90,16 @@ create table if not exists reservations (
     number_of_people int not null,
     total_amount_tax_incl int not null,
     sales_tax int not null,
-    reservation_method varchar(15) not null,
+    reservation_method int not null,
     member_id int  references members(id) check (
     case
-        when non_member_name is null
+        when reservation_method = 1
+            and non_member_name is null
             and non_member_mail is null
             and non_member_phone_number is null
             and member_id is not null then true
-        when non_member_name is not null
+        when reservation_method = 1
+            and non_member_name is not null
             and non_member_mail is not null
             and non_member_phone_number is not null
             and member_id is null then true
