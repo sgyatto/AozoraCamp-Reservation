@@ -26,17 +26,16 @@ public class StayInfo {
 	 */
 	public boolean isValidPeriod() {
 
+		// 今日
+		LocalDate today = LocalDate.now();
 		// 翌日
-		LocalDate tomorrow = LocalDate.now().plusDays(1);
+		LocalDate tomorrow = today.plusDays(1);
 		// 90日後
-		LocalDate day90Later = LocalDate.now().plusDays(90);
+		LocalDate day90Later = today.plusDays(90);
 		// 最終宿泊日
 		LocalDate dateTo = this.getDateTo();
 
-		if (dateFrom.isBefore(tomorrow) || dateTo.isAfter(day90Later)) {
-			return false;
-		}
-		return true;
+		return !dateFrom.isBefore(tomorrow) && !dateTo.isAfter(day90Later);
 	}
 
 	/**
