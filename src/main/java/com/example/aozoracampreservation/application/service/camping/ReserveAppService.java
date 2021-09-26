@@ -184,4 +184,6 @@ public class ReserveAppService {
 		private BigDecimal totalAmountTaxIncl;
 		private BigDecimal salesTax;
 	}
+
+
 }
