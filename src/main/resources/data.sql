@@ -29,8 +29,8 @@ insert into members (
                     , updated_at
                     , created_at
 ) values
-(default , '藤村忠寿', 'aozora@camp.com', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', '09012345678', 'ROLE_GENERAL', default, default)
-,(default ,'嬉野雅道','aozora2@camp.com','$2a$10$bWrKNHFJ4bDoUl/hSt6GoeKm1QHdAkkrFDV.Lh5SKEumpg9kAZ8TO','09088888888','ROLE_GENERAL',default, default)
+(1 , '藤村忠寿', 'aozora@camp.com', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', '09012345678', 'ROLE_GENERAL', default, default)
+,(2 ,'嬉野雅道','aozora2@camp.com','$2a$10$bWrKNHFJ4bDoUl/hSt6GoeKm1QHdAkkrFDV.Lh5SKEumpg9kAZ8TO','09088888888','ROLE_GENERAL',default, default)
 ;
 
 -- site_types

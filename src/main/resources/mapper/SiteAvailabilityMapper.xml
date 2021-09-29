@@ -15,6 +15,8 @@
     where
             site_type_id = #{siteTypeId}
             and calendar_date between #{from} and #{to}
+    order by
+            calendar_date
   </select>
   <select id="countDaysNotAvailable" resultType="int">
     select

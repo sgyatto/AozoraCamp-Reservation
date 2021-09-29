@@ -7,8 +7,11 @@ import org.mockito.Mockito;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ReservationTest {
@@ -146,20 +149,6 @@ class ReservationTest {
 						salesTax, reservationMethod, memberId, null, null, null
 				);
 			});
-			// totalAmountTaxIncl が未設定
-			assertThrows(IllegalArgumentException.class, () -> {
-				new Reservation(
-						siteTypeId, dateFrom, stayDays, numberOfPeople, null,
-						salesTax, reservationMethod, memberId, null, null, null
-				);
-			});
-			// salesTax が未設定
-			assertThrows(IllegalArgumentException.class, () -> {
-				new Reservation(
-						siteTypeId, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
-						null, reservationMethod, memberId, null, null, null
-				);
-			});
 			// reservationMethod が未設定
 			assertThrows(IllegalArgumentException.class, () -> {
 				new Reservation(
@@ -224,6 +213,31 @@ class ReservationTest {
 			);
 
 			assertFalse(reservation.isCanceled());
+		}
+	}
+
+	@Nested
+	class CalcTotalAmountTaxInclAndSalesTaxTest {
+		@Test
+		void 税込金額と消費税が算出される() {
+			var mock0 = mock(ReservationDetail.class);
+			doReturn(new BigDecimal(4000)).when(mock0).getSiteRate();
+			doReturn(BigDecimal.valueOf(0.10).setScale(2)).when(mock0).getTaxRate();
+
+			var mock1 = mock(ReservationDetail.class);
+			doReturn(new BigDecimal(3000)).when(mock1).getSiteRate();
+			doReturn(BigDecimal.valueOf(0.10).setScale(2)).when(mock1).getTaxRate();
+
+			List<ReservationDetail> details = List.of(mock0, mock1);
+			Reservation reservation = new Reservation(
+					siteTypeId, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
+					salesTax, reservationMethod, 10, null, null, null
+			);
+			reservation.setReservationDetails(details);
+			reservation.calcTotalAmountTaxInclAndSalesTax();
+
+			assertEquals(new BigDecimal(7700), reservation.getTotalAmountTaxIncl());
+			assertEquals(new BigDecimal(700), reservation.getSalesTax());
 		}
 	}
 }

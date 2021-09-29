@@ -4,19 +4,13 @@ import com.example.aozoracampreservation.domain.model.*;
 import com.example.aozoracampreservation.domain.service.*;
 import com.example.aozoracampreservation.exception.BusinessException;
 import com.example.aozoracampreservation.exception.SystemException;
-import com.example.aozoracampreservation.presentation.camping.ReserveConfirmDto;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -33,7 +27,8 @@ public class ReserveAppService {
 	private final MessageSource messageSource;
 
 	public ReserveAppService(MemberService memberService, SiteRateService siteRateService,
-							 SiteAvailabilityService siteAvailabilityService, ReservationService reservationService, ReservationDetailService reservationDetailService, MessageSource messageSource) {
+							 SiteAvailabilityService siteAvailabilityService, ReservationService reservationService,
+							 ReservationDetailService reservationDetailService, MessageSource messageSource) {
 		this.memberService = memberService;
 		this.siteRateService = siteRateService;
 		this.siteAvailabilityService = siteAvailabilityService;
@@ -43,25 +38,28 @@ public class ReserveAppService {
 	}
 
 	/**
-	 * 予約内容確認情報取得
+	 * 予約情報組み立て
 	 * @param stayInfo 宿泊情報
-	 * @return 予約内容確認情報
+	 * @return 予約情報
 	 */
-	public ReserveConfirmDto confirmInfo(StayInfo stayInfo) {
-
-		ReserveConfirmDto dto = new ReserveConfirmDto();
-
+	public Reservation buildReservation(StayInfo stayInfo, UserInfo userInfo) {
+		Reservation reservation = new Reservation(
+				stayInfo.getSiteTypeId(),
+				stayInfo.getDateFrom(),
+				stayInfo.getStayDays(),
+				stayInfo.getNumberOfPeople(),
+				null,
+				null,
+				1, // インターネット受付
+				userInfo.getId(),
+				userInfo.getName(),
+				userInfo.getMail(),
+				userInfo.getPhoneNumber()
+				);
 		// 予約詳細リストを生成
-		List<ReservationDetail> reservationDetails = this.makeReservationDetail(stayInfo);
-		// 宿泊料金の合計額算出
-		ResultCalcTotal resultCalcTotal = calcTotalAmountTaxInclAndSalesTax(reservationDetails);
-
-		// 予約内容確認情報に設定
-		dto.setTotalAmountTaxIncl(resultCalcTotal.getTotalAmountTaxIncl());
-		dto.setSalesTax(resultCalcTotal.getSalesTax());
-		dto.setReservationDetails(reservationDetails);
-
-		return dto;
+		reservation.setReservationDetails(this.makeReservationDetail(stayInfo));
+		reservation.calcTotalAmountTaxInclAndSalesTax();
+		return reservation;
 	}
 
 	/**
@@ -73,46 +71,6 @@ public class ReserveAppService {
 		return memberService.findById(memberId)
 				.orElseThrow(() -> new SystemException(messageSource.getMessage("exception.dataNotFound",
 						new String[] {String.valueOf(memberId)}, Locale.JAPAN)));
-	}
-
-	/**
-	 * 宿泊料金の合計額算出<br>
-	 * 予約詳細リストをもとに宿泊料金の合計額を算出する。
-	 * 消費税率は宿泊日をもとに決定されるため、消費税率ごとに1度だけ積算したのち、合算する。
-	 * @param details 予約詳細リスト
-	 * @return 宿泊料金の合計額
-	 */
-	private ResultCalcTotal calcTotalAmountTaxInclAndSalesTax(List<ReservationDetail> details) {
-
-		// 消費税率毎に料金をグループ化して集計（消費税率改定またぎ対応）
-		// ex. {{0.08, 3000}, {0.10, 9000}}
-		Map<BigDecimal, BigDecimal> map = details.stream().collect(
-				Collectors.groupingBy(ReservationDetail::getTaxRate,
-						Collectors.reducing(BigDecimal.ZERO, ReservationDetail::getSiteRate, BigDecimal::add)));
-
-		// 合計金額（税抜）
-		BigDecimal totalAmount = BigDecimal.ZERO;
-		// 合計金額（税込）端数未処理
-		BigDecimal totalAmountTaxInclBeforeRounding = BigDecimal.ZERO;
-
-		for (Map.Entry<BigDecimal, BigDecimal> entry : map.entrySet()) {
-			// key:消費税率
-			BigDecimal taxRate = entry.getKey();
-			// value: 消費税率毎の集計金額
-			BigDecimal totalByTaxRate = entry.getValue();
-
-			// 合計金額（税抜）
-			totalAmount = totalAmount.add(totalByTaxRate);
-
-			// 合計金額（税抜）端数未処理
-			totalAmountTaxInclBeforeRounding = totalAmountTaxInclBeforeRounding.add(
-					BigDecimal.ONE.add(taxRate).multiply(totalByTaxRate));
-		}
-
-		// 合計金額（税込）端数処理完了
-		BigDecimal totalAmountTaxIncl = totalAmountTaxInclBeforeRounding.setScale(0, RoundingMode.FLOOR);
-
-		return new ResultCalcTotal(totalAmountTaxIncl, totalAmountTaxIncl.subtract(totalAmount));
 	}
 
 	/**
@@ -129,37 +87,26 @@ public class ReserveAppService {
 	}
 
 	/**
-	 * キャンプ予約
-	 * @param stayInfo	宿泊情報
-	 * @param reserveConfirmDto	予約内容確認情報
-	 * @param userInfo ユーザ―情報
+	 * キャンプ予約<br>
+	 * サイト空き状況の在庫を減らし、予約登録を行う。
+	 * @param reservation	予約
 	 */
 	@Transactional(rollbackFor=Exception.class)
-	public void saveReservation(StayInfo stayInfo, ReserveConfirmDto reserveConfirmDto, UserInfo userInfo) {
+	public void saveReservation(Reservation reservation) {
+		StayInfo stayInfo = new StayInfo();
+		stayInfo.setSiteTypeId(reservation.getSiteTypeId());
+		stayInfo.setDateFrom(reservation.getDateFrom());
+		stayInfo.setStayDays(reservation.getStayDays());
+		stayInfo.setNumberOfPeople(reservation.getNumberOfPeople());
 
 		// サイト空き状況の在庫を減らし、サイトを確保
 		this.reduceAvailabilityCount(stayInfo);
-
-		// 登録用予約
-		Reservation reservation = new Reservation(
-				stayInfo.getSiteTypeId(),
-				stayInfo.getDateFrom(),
-				stayInfo.getStayDays(),
-				stayInfo.getNumberOfPeople(),
-				reserveConfirmDto.getTotalAmountTaxIncl(),
-				reserveConfirmDto.getSalesTax(),
-				1, // インターネット受付
-				userInfo.getId(),
-				userInfo.getName(),
-				userInfo.getMail(),
-				userInfo.getPhoneNumber()
-		);
 
 		// 予約登録
 		reservationService.createReservation(reservation);
 		// 予約詳細登録
 		reservationDetailService.createReservationDetails(
-				reserveConfirmDto.getReservationDetails(), reservation.getId());
+				reservation.getReservationDetails(), reservation.getId());
 	}
 
 	/**
@@ -174,16 +121,5 @@ public class ReserveAppService {
 			throw new BusinessException(messageSource.getMessage("exception.siteIsNotAvailable", null, Locale.JAPAN));
 		}
 	}
-
-	/**
-	 * 宿泊料金の合計額
-	 */
-	@AllArgsConstructor
-	@Data
-	static class ResultCalcTotal {
-		private BigDecimal totalAmountTaxIncl;
-		private BigDecimal salesTax;
-	}
-
 
 }

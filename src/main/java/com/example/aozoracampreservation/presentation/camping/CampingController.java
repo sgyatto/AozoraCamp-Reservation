@@ -2,10 +2,7 @@ package com.example.aozoracampreservation.presentation.camping;
 
 import com.example.aozoracampreservation.application.service.camping.CampingAppService;
 import com.example.aozoracampreservation.application.service.camping.ReserveAppService;
-import com.example.aozoracampreservation.domain.model.Member;
-import com.example.aozoracampreservation.domain.model.SiteType;
-import com.example.aozoracampreservation.domain.model.StayInfo;
-import com.example.aozoracampreservation.domain.model.UserInfo;
+import com.example.aozoracampreservation.domain.model.*;
 import com.example.aozoracampreservation.exception.BusinessException;
 import com.example.aozoracampreservation.exception.SystemException;
 import com.example.aozoracampreservation.security.AuthenticatedMember;
@@ -58,11 +55,6 @@ public class CampingController {
 	@ModelAttribute(value = "stayInfoForm")
 	public StayInfoForm setUpStayInfoForm() {
 		return new StayInfoForm();
-	}
-
-	@ModelAttribute(value = "reserveConfirmDto")
-	public ReserveConfirmDto setUpReserveConfirmDto() {
-		return new ReserveConfirmDto();
 	}
 
 	@ModelAttribute(value = "userInfoForm")
@@ -147,14 +139,17 @@ public class CampingController {
 		// セッションから宿泊情報取得
 		StayInfoForm form = (StayInfoForm) session.getAttribute("stayInfoFormSession");
 		StayInfo stayInfo = modelMapper.map(form, StayInfo.class);
-		// 予約内容確認情報取得
-		ReserveConfirmDto resultDto = reserveAppService.confirmInfo(stayInfo);
 		// 会員情報取得
 		Member member = reserveAppService.findMemberById(authenticatedMember.getId());
 
+		// 予約情報取得
+		UserInfo userInfo = new UserInfo();
+		userInfo.setId(member.getId());
+		Reservation reservation = reserveAppService.buildReservation(stayInfo, userInfo);
+
 		UserInfoForm userInfoForm = modelMapper.map(member, UserInfoForm.class);
 		model.addAttribute("guestFlg", false);
-		model.addAttribute("reserveConfirmDto", resultDto);
+		model.addAttribute("reservation", reservation);
 		model.addAttribute("userInfo", userInfoForm);
 		model.addAttribute("stayInfoForm", form);
 		return "camping/confirm";
@@ -181,14 +176,14 @@ public class CampingController {
 		}
 
 		StayInfo stayInfo = modelMapper.map(form, StayInfo.class);
-		// 予約内容確認情報取得
-		ReserveConfirmDto reserveConfirmDto = reserveAppService.confirmInfo(stayInfo);
+
 		// ユーザー情報設定
 		UserInfo userInfo = new UserInfo();
 		userInfo.setId(authenticatedMember.getId());
+		Reservation reservation = reserveAppService.buildReservation(stayInfo, userInfo);
 
 		// 予約
-		reserveAppService.saveReservation(stayInfo, reserveConfirmDto, userInfo);
+		reserveAppService.saveReservation(reservation);
 		return "redirect:/camping/member/reserve?complete";
 	}
 
@@ -235,10 +230,11 @@ public class CampingController {
 
 		StayInfo stayInfo = modelMapper.map(stayInfoForm, StayInfo.class);
 		// 予約内容確認情報取得
-		ReserveConfirmDto resultDto = reserveAppService.confirmInfo(stayInfo);
+		UserInfo userInfo = modelMapper.map(userInfoForm, UserInfo.class);
+		Reservation reservation = reserveAppService.buildReservation(stayInfo, userInfo);
 
 		model.addAttribute("guestFlg", true);
-		model.addAttribute("reserveConfirmDto", resultDto);
+		model.addAttribute("reservation", reservation);
 		model.addAttribute("userInfo", userInfoForm);
 		return "camping/confirm";
 	}
@@ -264,13 +260,11 @@ public class CampingController {
 			throw new SystemException(messageSource.getMessage("exception.errorAtCreate", null, Locale.JAPAN));
 		}
 
+		// 予約
 		StayInfo stayInfo = modelMapper.map(stayInfoForm, StayInfo.class);
 		UserInfo userInfo = modelMapper.map(userInfoForm, UserInfo.class);
-
-		// 予約内容確認情報取得
-		ReserveConfirmDto reserveConfirmDto = reserveAppService.confirmInfo(stayInfo);
-		// 予約
-		reserveAppService.saveReservation(stayInfo, reserveConfirmDto, userInfo);
+		Reservation reservation = reserveAppService.buildReservation(stayInfo, userInfo);
+		reserveAppService.saveReservation(reservation);
 		return "redirect:/camping/guest/reserve?complete";
 	}
 

@@ -11,7 +11,7 @@
 <main layout:fragment="content">
   <div class="container">
     <h3 class="page-title">予約内容確認</h3>
-    <div class="row" th:with="dto=${reserveConfirmDto}, stayInfo=${stayInfoForm}">
+    <div class="row" th:with="stayInfo=${stayInfoForm}">
       <div class="col-md-7 px-4">
         <section class="mb-5">
           <h4>予約者情報</h4>
@@ -57,17 +57,17 @@
           <div class="p-2 d-flex">
             <div class="col-7">合計金額</div>
             <div class="col-5 text-right" id="totalAmount" name="totalAmount"
-                 th:text="|${#numbers.formatInteger(dto.getTotalAmountTaxIncl(), 3, 'COMMA')}円|"></div>
+                 th:text="|${#numbers.formatInteger(reservation.getTotalAmountTaxIncl(), 3, 'COMMA')}円|"></div>
           </div>
           <div class="p-2 d-flex pt-3">
             <div class="col-7">内消費税</div>
             <div class="col-5 text-right" id="salesTax" salesTax="tax"
-                 th:text="|${#numbers.formatInteger(dto.getSalesTax(), 3, 'COMMA')}円|"></div>
+                 th:text="|${#numbers.formatInteger(reservation.getSalesTax(), 3, 'COMMA')}円|"></div>
           </div>
           <div class="p-2 ml-3 mt-4">
             <h5>内訳</h5>
           </div>
-          <div th:each="detail : ${dto.getReservationDetails()}">
+          <div th:each="detail : ${reservation.getReservationDetails()}">
             <div class="p-2 d-flex">
               <div class="col-7" th:text="|${#temporals.format(detail.getReservationDate(), 'yyyy年M月d日')}分|"></div>
               <div class="col-5 text-right" id="siteRate"
