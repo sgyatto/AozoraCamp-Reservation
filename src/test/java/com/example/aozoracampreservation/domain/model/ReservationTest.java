@@ -68,26 +68,20 @@ class ReservationTest {
 			String str = "テスト太郎" ;
 
 			// nonMemberName が設定済み
-			assertThrows(IllegalArgumentException.class, () -> {
-				new Reservation(
-						siteTypeId, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
-						salesTax, reservationMethod, memberId, str, null, null
-				);
-			});
+			assertThrows(IllegalArgumentException.class, () -> new Reservation(
+					siteTypeId, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
+					salesTax, reservationMethod, memberId, str, null, null
+			));
 			// nonMemberMail が設定済み
-			assertThrows(IllegalArgumentException.class, () -> {
-				new Reservation(
-						siteTypeId, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
-						salesTax, reservationMethod, memberId, null, str, null
-				);
-			});
+			assertThrows(IllegalArgumentException.class, () -> new Reservation(
+					siteTypeId, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
+					salesTax, reservationMethod, memberId, null, str, null
+			));
 			// nonMemberPhoneNumber が設定済み
-			assertThrows(IllegalArgumentException.class, () -> {
-				new Reservation(
-						siteTypeId, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
-						salesTax, reservationMethod, memberId, null, null, str
-				);
-			});
+			assertThrows(IllegalArgumentException.class, () -> new Reservation(
+					siteTypeId, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
+					salesTax, reservationMethod, memberId, null, null, str
+			));
 		}
 
 		@Test
@@ -95,26 +89,20 @@ class ReservationTest {
 			String str = "テスト" ;
 
 			// nonMemberName が未設定
-			assertThrows(IllegalArgumentException.class, () -> {
-				new Reservation(
-						siteTypeId, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
-						salesTax, reservationMethod, null, null, str, str
-				);
-			});
+			assertThrows(IllegalArgumentException.class, () -> new Reservation(
+					siteTypeId, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
+					salesTax, reservationMethod, null, null, str, str
+			));
 			// nonMemberMail が未設定
-			assertThrows(IllegalArgumentException.class, () -> {
-				new Reservation(
-						siteTypeId, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
-						salesTax, reservationMethod, null, str, null, str
-				);
-			});
+			assertThrows(IllegalArgumentException.class, () -> new Reservation(
+					siteTypeId, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
+					salesTax, reservationMethod, null, str, null, str
+			));
 			// nonMemberPhoneNumber が未設定
-			assertThrows(IllegalArgumentException.class, () -> {
-				new Reservation(
-						siteTypeId, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
-						salesTax, reservationMethod, null, str, str, null
-				);
-			});
+			assertThrows(IllegalArgumentException.class, () -> new Reservation(
+					siteTypeId, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
+					salesTax, reservationMethod, null, str, str, null
+			));
 		}
 
 		@Test
@@ -122,40 +110,30 @@ class ReservationTest {
 			Integer memberId = 10;
 
 			// siteTypeId が未設定
-			assertThrows(IllegalArgumentException.class, () -> {
-				new Reservation(
-						null, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
-						salesTax, reservationMethod, memberId, null, null, null
-				);
-			});
+			assertThrows(IllegalArgumentException.class, () -> new Reservation(
+					null, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
+					salesTax, reservationMethod, memberId, null, null, null
+			));
 			// dateFrom が未設定
-			assertThrows(IllegalArgumentException.class, () -> {
-				new Reservation(
-						siteTypeId, null, stayDays, numberOfPeople, totalAmountTaxIncl,
-						salesTax, reservationMethod, memberId, null, null, null
-				);
-			});
+			assertThrows(IllegalArgumentException.class, () -> new Reservation(
+					siteTypeId, null, stayDays, numberOfPeople, totalAmountTaxIncl,
+					salesTax, reservationMethod, memberId, null, null, null
+			));
 			// stayDays が未設定
-			assertThrows(IllegalArgumentException.class, () -> {
-				new Reservation(
-						siteTypeId, dateFrom, null, numberOfPeople, totalAmountTaxIncl,
-						salesTax, reservationMethod, memberId, null, null, null
-				);
-			});
+			assertThrows(IllegalArgumentException.class, () -> new Reservation(
+					siteTypeId, dateFrom, null, numberOfPeople, totalAmountTaxIncl,
+					salesTax, reservationMethod, memberId, null, null, null
+			));
 			// numberOfPeople が未設定
-			assertThrows(IllegalArgumentException.class, () -> {
-				new Reservation(
-						siteTypeId, dateFrom, stayDays, null, totalAmountTaxIncl,
-						salesTax, reservationMethod, memberId, null, null, null
-				);
-			});
+			assertThrows(IllegalArgumentException.class, () -> new Reservation(
+					siteTypeId, dateFrom, stayDays, null, totalAmountTaxIncl,
+					salesTax, reservationMethod, memberId, null, null, null
+			));
 			// reservationMethod が未設定
-			assertThrows(IllegalArgumentException.class, () -> {
-				new Reservation(
-						siteTypeId, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
-						salesTax, null, memberId, null, null, null
-				);
-			});
+			assertThrows(IllegalArgumentException.class, () -> new Reservation(
+					siteTypeId, dateFrom, stayDays, numberOfPeople, totalAmountTaxIncl,
+					salesTax, null, memberId, null, null, null
+			));
 		}
 	}
 
