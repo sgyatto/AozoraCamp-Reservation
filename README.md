@@ -1,6 +1,6 @@
 # Aozora Camp Reservation
 
-https://aozoracamprsv.com
+https://aozoracamprsv.com ※停止中
 
 <img src="https://i.gyazo.com/dfa9b268f772662ec5d299dfe161edd9.png" width="600px">
 
